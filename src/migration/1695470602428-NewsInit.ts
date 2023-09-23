@@ -10,6 +10,8 @@ export class NewsInit1695470602428 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            generationStrategy: 'increment',
+            isGenerated: true,
           },
           {
             name: 'title',
