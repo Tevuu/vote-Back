@@ -10,11 +10,11 @@ export class NewsService {
     @InjectRepository(NewsEntity) private readonly news: Repository<NewsEntity>,
   ) {}
 
-  public async findAll() {
+  public async findAll(): Promise<NewsEntity[]> {
     return this.news.createQueryBuilder().select().getMany();
   }
 
-  public async findById(id: number) {
+  public async findById(id: number): Promise<NewsEntity> {
     return this.news
       .createQueryBuilder()
       .select()
@@ -22,7 +22,7 @@ export class NewsService {
       .getOne();
   }
 
-  public async create(data: CreateNewsDTO) {
+  public async create(data: CreateNewsDTO): Promise<NewsEntity> {
     const newsId = await this.news
       .createQueryBuilder()
       .insert()
@@ -33,7 +33,7 @@ export class NewsService {
     return this.findById(newsId);
   }
 
-  public async update(id: number, data: CreateNewsDTO) {
+  public async update(id: number, data: CreateNewsDTO): Promise<NewsEntity> {
     await this.news
       .createQueryBuilder()
       .update()
@@ -44,7 +44,7 @@ export class NewsService {
     return this.findById(id);
   }
 
-  public async destroy(id: number) {
+  public async destroy(id: number): Promise<NewsEntity> {
     const deletedNews = await this.findById(id);
 
     await this.news
