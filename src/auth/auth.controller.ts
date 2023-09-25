@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Header } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthUserDTO } from 'src/users/dto/users.dto';
 
@@ -6,6 +6,7 @@ import { AuthUserDTO } from 'src/users/dto/users.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Header('Access-Control-Allow-Origin', '*')
   @Post('')
   private async login(@Body() data: AuthUserDTO) {
     return this.authService.login(data);
