@@ -42,4 +42,20 @@ export class UsersController {
   private destroy(@Param('id') id: number): Promise<UsersEntity> {
     return this.usersService.destroy(id);
   }
+
+  @Get('/getRole/:userId/:roleName')
+  private async getRole(
+    @Param('userId') userId: number,
+    @Param('roleName') roleName: string | number,
+  ) {
+    return this.usersService.getRole(userId, roleName);
+  }
+
+  @Get('/removeRole/:userId/:roleName')
+  private async removeRole(
+    @Param('userId') userId: number,
+    @Param('roleName') roleName: string | number,
+  ) {
+    return this.usersService.removeRole(userId, roleName);
+  }
 }

@@ -3,16 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
+import { RolesEntity } from 'src/roles/entities/roles.entity';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly users: Repository<UsersEntity>,
+    private readonly roles: RolesService,
   ) {}
 
   public async findAll(): Promise<UsersEntity[]> {
-    return this.users.createQueryBuilder().select().getMany();
+    return this.users.find({
+      relations: {
+        roles: true,
+      },
+    });
   }
 
   public async findById(id: number): Promise<UsersEntity> {
@@ -25,14 +32,16 @@ export class UsersService {
   }
 
   public async create(data: CreateUserDTO): Promise<UsersEntity> {
-    const userId = await this.users
+    const id = await this.users
       .createQueryBuilder()
       .insert()
       .values(data)
       .execute()
       .then((user) => user.identifiers[0].id);
 
-    return this.findById(userId);
+    await this.getRole(id, 'Student');
+
+    return this.findById(id);
   }
 
   public async update(id: number, data: UpdateUserDTO): Promise<UsersEntity> {
@@ -56,5 +65,25 @@ export class UsersService {
       .execute();
 
     return deletedUser;
+  }
+
+  async getRole(userId: number, roleName: string | number) {
+    await this.users
+      .createQueryBuilder()
+      .relation(UsersEntity, 'roles')
+      .of(userId)
+      .add((await this.roles.getByName(roleName)).id);
+
+    return this.findById(userId);
+  }
+
+  async removeRole(userId, roleName) {
+    await this.users
+      .createQueryBuilder()
+      .relation(UsersEntity, 'roles')
+      .of(userId)
+      .remove((await this.roles.getByName(roleName)).id);
+
+    return this.findById(userId);
   }
 }

@@ -23,6 +23,14 @@ export class RolesService {
       .getOne();
   }
 
+  public async getByName(name: string | number): Promise<RolesEntity> {
+    return this.roles
+      .createQueryBuilder()
+      .select()
+      .where('title = :name', { name })
+      .getOne();
+  }
+
   public async create(data: CreateRoleDTO): Promise<RolesEntity> {
     const roleId = await this.roles
       .createQueryBuilder()
