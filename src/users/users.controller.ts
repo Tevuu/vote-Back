@@ -25,6 +25,11 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
+  @Get('/email/:email')
+  private getByEmail(@Param('email') email: string): Promise<UsersEntity> {
+    return this.usersService.findByEmail(email);
+  }
+
   @Post()
   private create(@Body() data: CreateUserDTO): Promise<UsersEntity> {
     return this.usersService.create(data);

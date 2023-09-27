@@ -31,6 +31,15 @@ export class UsersService {
     });
   }
 
+  public async findByEmail(email: string): Promise<UsersEntity> {
+    return this.users.findOne({
+      where: { email },
+      relations: {
+        roles: true,
+      },
+    });
+  }
+
   public async create(data: CreateUserDTO): Promise<UsersEntity> {
     const id = await this.users
       .createQueryBuilder()
