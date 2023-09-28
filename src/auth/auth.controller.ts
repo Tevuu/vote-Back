@@ -11,4 +11,10 @@ export class AuthController {
   private async login(@Body() data: AuthUserDTO) {
     return this.authService.login(data);
   }
+
+  @Header('Access-Control-Allow-Origin', '*')
+  @Post('/decode')
+  private async tokenCheck(@Body() token) {
+    return this.authService.tokenCheck(token.token);
+  }
 }

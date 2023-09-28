@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthUserDTO} from 'src/users/dto/users.dto';
+import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
+import { config } from 'dotenv';
+import { AuthUserDTO } from 'src/users/dto/users.dto';
 import { UsersEntity } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+
+config();
 
 @Injectable()
 export class AuthService {
@@ -11,20 +15,37 @@ export class AuthService {
     @InjectRepository(UsersEntity)
     private readonly users: Repository<UsersEntity>,
     private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(data: AuthUserDTO) {
-    const user = await this.users
-      .createQueryBuilder()
-      .select()
-      .where('email = :email', { email: data.email })
-      .andWhere('password = :password', { password: data.password })
-      .getOne();
+    const user = await this.validateUser(data);
+    return this.generateToken(user);
+  }
 
-    if (user) {
-      return this.usersService.findById(user.id);
+  private async generateToken(user: UsersEntity) {
+    const payload = { ...user };
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
+
+  private async validateUser(userData: AuthUserDTO) {
+    const user = await this.usersService.findByEmail(userData.email);
+
+    if (user && user.password === userData.password) {
+      return user;
     }
+    throw new UnauthorizedException({
+      message: 'Некорректный email или пароль',
+    });
+  }
 
-    return false;
+  async tokenCheck(token: string) {
+    try {
+      return await this.jwtService.decode(token);
+    } catch {
+      return false;
+    }
   }
 }
