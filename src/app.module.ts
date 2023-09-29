@@ -23,8 +23,9 @@ import { TokenModule } from './token/token.module';
           database: config.get<string>('DB_DATABASE'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           autoLoadEntities: true,
-          migrations: [__dirname + '/**/migration/*{.ts,.js}'],
-          migrationsRun: true,
+          // migrations: [__dirname + '/**/migration/*{.ts,.js}'],
+          // migrationsRun: true,
+          synchronize: true,
         };
       },
     }),

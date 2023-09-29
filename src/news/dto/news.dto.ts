@@ -4,6 +4,8 @@ export class CreateNewsDTO {
   title: string;
 
   content: string;
+
+  grup: string;
 }
 
 export class UpdateNewsDTO extends PartialType(CreateNewsDTO) {}

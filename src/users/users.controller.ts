@@ -10,6 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { UsersEntity } from './entities/users.entity';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
+import { group } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -48,19 +49,24 @@ export class UsersController {
     return this.usersService.destroy(id);
   }
 
-  @Get('/getRole/:userId/:roleName')
+  @Get('/getRoleByTitle/:userId/:roleName')
   private async getRole(
     @Param('userId') userId: number,
     @Param('roleName') roleName: string | number,
   ) {
-    return this.usersService.getRole(userId, roleName);
+    return this.usersService.getRoleByTitle(userId, roleName);
   }
 
-  @Get('/removeRole/:userId/:roleName')
+  @Get('/removeRoleByTitle/:userId/:roleName')
   private async removeRole(
     @Param('userId') userId: number,
     @Param('roleName') roleName: string | number,
   ) {
-    return this.usersService.removeRole(userId, roleName);
+    return this.usersService.removeRoleByTitle(userId, roleName);
+  }
+
+  @Get('/getByGrup/:grup')
+  private async findAllByGrup(@Param('grup') grup: string) {
+    return this.usersService.findAllByGrup(grup);
   }
 }

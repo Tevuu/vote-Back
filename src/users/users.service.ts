@@ -47,7 +47,7 @@ export class UsersService {
       .execute()
       .then((user) => user.identifiers[0].id);
 
-    await this.getRole(id, 'Student');
+    await this.getRoleByTitle(id, 'Student');
 
     return this.findById(id);
   }
@@ -75,7 +75,7 @@ export class UsersService {
     return deletedUser;
   }
 
-  async getRole(userId: number, roleName: string | number) {
+  async getRoleByTitle(userId: number, roleName: string | number) {
     await this.users
       .createQueryBuilder()
       .relation(UsersEntity, 'roles')
@@ -85,7 +85,7 @@ export class UsersService {
     return this.findById(userId);
   }
 
-  async removeRole(userId, roleName) {
+  async removeRoleByTitle(userId, roleName) {
     await this.users
       .createQueryBuilder()
       .relation(UsersEntity, 'roles')
@@ -93,5 +93,20 @@ export class UsersService {
       .remove((await this.roles.getByName(roleName)).id);
 
     return this.findById(userId);
+  }
+
+  async findAllByGrup(grup: string) {
+    return this.users.find({
+      where: {
+        roles: [
+          {
+            grup,
+          },
+        ],
+      },
+      relations: {
+        roles: true,
+      },
+    });
   }
 }

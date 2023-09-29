@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
+
+import { DateTime } from 'luxon';
 
 @Entity('news')
 export class NewsEntity {
@@ -12,5 +19,10 @@ export class NewsEntity {
   content: string;
 
   @Column()
-  createdAt: string;
+  grup: string;
+
+  @Column({
+    default: () => '(UNIX_TIMESTAMP())',
+  })
+  createdAt: number;
 }

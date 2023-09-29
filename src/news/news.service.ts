@@ -55,4 +55,12 @@ export class NewsService {
 
     return deletedNews;
   }
+
+  public async findByGrup(grup: string) {
+    return this.news
+      .createQueryBuilder()
+      .select()
+      .where('grup = :grup', { grup })
+      .getMany();
+  }
 }
