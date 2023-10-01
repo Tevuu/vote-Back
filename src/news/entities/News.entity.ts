@@ -1,24 +1,17 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-} from 'typeorm';
-
-import { DateTime } from 'luxon';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('news')
 export class NewsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
+  @Column({ length: 255, nullable: false })
+  header: string;
 
-  @Column()
+  @Column({ length: 2000, nullable: false })
   content: string;
 
-  @Column()
+  @Column({ length: 4, nullable: false })
   grup: string;
 
   @Column({

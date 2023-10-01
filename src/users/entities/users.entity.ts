@@ -1,36 +1,34 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-  BaseEntity,
-} from 'typeorm';
-import { RolesEntity } from 'src/roles/entities/roles.entity';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
 @Entity('users')
 export class UsersEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: false })
   secondName: string;
 
-  @Column()
+  @Column({ nullable: false })
   thirdName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @ManyToMany(() => RolesEntity, (roles) => roles.users)
-  @JoinTable({
-    name: 'users_roles',
-  })
-  roles: RolesEntity[];
+  // @ManyToMany(() => RolesEntity, (roles) => roles.users)
+  // @JoinTable({
+  //   name: 'users_roles',
+  // })
+  // roles: RolesEntity[];
+
+  @Column({ type: 'simple-array', nullable: false })
+  grup: string[];
+
+  @Column({ type: 'simple-array', nullable: false })
+  roles: string[];
 }

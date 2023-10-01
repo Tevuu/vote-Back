@@ -14,29 +14,23 @@ export class UsersService {
   ) {}
 
   public async findAll(): Promise<UsersEntity[]> {
-    return this.users.find({
-      relations: {
-        roles: true,
-      },
-    });
+    return this.users.createQueryBuilder().select().getMany();
   }
 
   public async findById(id: number): Promise<UsersEntity> {
-    return this.users.findOne({
-      where: { id },
-      relations: {
-        roles: true,
-      },
-    });
+    return this.users
+      .createQueryBuilder()
+      .select()
+      .where('id = :id', { id })
+      .getOne();
   }
 
   public async findByEmail(email: string): Promise<UsersEntity> {
-    return this.users.findOne({
-      where: { email },
-      relations: {
-        roles: true,
-      },
-    });
+    return this.users
+      .createQueryBuilder()
+      .select()
+      .where('email = :email', { email })
+      .getOne();
   }
 
   public async create(data: CreateUserDTO): Promise<UsersEntity> {
@@ -46,8 +40,6 @@ export class UsersService {
       .values(data)
       .execute()
       .then((user) => user.identifiers[0].id);
-
-    await this.getRoleByTitle(id, 'Student');
 
     return this.findById(id);
   }
@@ -93,20 +85,5 @@ export class UsersService {
       .remove((await this.roles.getByName(roleName)).id);
 
     return this.findById(userId);
-  }
-
-  async findAllByGrup(grup: string) {
-    return this.users.find({
-      where: {
-        roles: [
-          {
-            grup,
-          },
-        ],
-      },
-      relations: {
-        roles: true,
-      },
-    });
   }
 }

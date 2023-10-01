@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/swagger';
 
 export class CreateNewsDTO {
-  title: string;
+  header: string;
 
   content: string;
 

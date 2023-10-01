@@ -65,8 +65,8 @@ export class UsersController {
     return this.usersService.removeRoleByTitle(userId, roleName);
   }
 
-  @Get('/getByGrup/:grup')
-  private async findAllByGrup(@Param('grup') grup: string) {
-    return this.usersService.findAllByGrup(grup);
-  }
+  // @Get('/getByGrup/:grup')
+  // private async findAllByGrup(@Param('grup') grup: string) {
+  //   return this.usersService.findAllByGrup(grup);
+  // }
 }
