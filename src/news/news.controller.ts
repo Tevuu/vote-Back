@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UploadedFiles,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -34,21 +35,21 @@ export class NewsController {
     return this.newsService.findByGrup(grup);
   }
 
-  @Post('/')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
-  )
-  private async create(@Body() data, @UploadedFile() file) {
-    return this.newsService.create(data, file);
-  }
+  // @Post('/')
+  // @UseInterceptors(
+  //   FileInterceptor('image', {
+  //     storage: diskStorage({
+  //       destination: './uploads',
+  //       filename: editFileName,
+  //     }),
+  //     fileFilter: imageFileFilter,
+  //   }),
+  // )
+  // private async create(@Body() data, @UploadedFile() file) {
+  //   return this.newsService.create(data, file);
+  // }
 
-  @Post('createWithSomeImages')
+  @Post('')
   @UseInterceptors(
     FilesInterceptor('image', 10, {
       storage: diskStorage({

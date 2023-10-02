@@ -100,6 +100,6 @@ export class NewsService {
       .where('id = :id', { id })
       .getOne();
 
-    return photos.photos;
+    return photos ? photos.photos : [];
   }
 }
