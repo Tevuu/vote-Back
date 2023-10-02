@@ -10,7 +10,6 @@ import {
 import { UsersService } from './users.service';
 import { UsersEntity } from './entities/users.entity';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
-import { group } from 'console';
 
 @Controller('users')
 export class UsersController {

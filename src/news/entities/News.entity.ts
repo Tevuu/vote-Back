@@ -14,6 +14,9 @@ export class NewsEntity {
   @Column({ length: 4, nullable: false })
   grup: string;
 
+  @Column({ type: 'simple-array', nullable: true, default: null })
+  photos: string[];
+
   @Column({
     default: () => '(UNIX_TIMESTAMP())',
   })

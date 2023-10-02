@@ -1,14 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { MulterModule } from '@nestjs/platform-express';
 import { NewsModule } from './news/news.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads',
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -33,6 +38,7 @@ import { TokenModule } from './token/token.module';
     RolesModule,
     AuthModule,
     TokenModule,
+    FilesModule,
   ],
 })
 export class AppModule {}

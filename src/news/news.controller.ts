@@ -6,7 +6,13 @@ import {
   Delete,
   Param,
   Body,
+  UseInterceptors,
+  UploadedFile,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from '../config/files.utils';
 import { NewsService } from './news.service';
 
 @Controller('news')
@@ -27,9 +33,33 @@ export class NewsController {
   private async findByGrup(@Param('grup') grup: string) {
     return this.newsService.findByGrup(grup);
   }
+
   @Post('/')
-  private async create(@Body() data) {
-    return this.newsService.create(data);
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  private async create(@Body() data, @UploadedFile() file) {
+    return this.newsService.create(data, file);
+  }
+
+  @Post('createWithSomeImages')
+  @UseInterceptors(
+    FilesInterceptor('image', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  private async createWithSomeImages(@Body() data, @UploadedFiles() files) {
+    return this.newsService.createWithSomeImages(data, files);
   }
 
   @Put('/:id')
@@ -40,5 +70,10 @@ export class NewsController {
   @Delete('/:id')
   private async destroy(@Param('id') id: number) {
     return this.newsService.destroy(id);
+  }
+
+  @Get('/getPhotosList/:id')
+  private async getPhotosList(@Param('id') id: number) {
+    return this.newsService.getPhotosList(id);
   }
 }
