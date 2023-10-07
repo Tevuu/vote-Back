@@ -36,7 +36,7 @@ export class FilesService {
     const response = res.sendFile(image, { root: './uploads' });
     return {
       status: HttpStatus.OK,
-      data: response,
+      data: { response },
     };
   }
 }

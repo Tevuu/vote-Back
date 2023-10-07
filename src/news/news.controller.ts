@@ -64,8 +64,21 @@ export class NewsController {
   }
 
   @Put('/:id')
-  private async update(@Param('id') id: number, @Body() data) {
-    return this.newsService.update(id, data);
+  @UseInterceptors(
+    FilesInterceptor('image', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  private async update(
+    @Param('id') id: number,
+    @Body() data,
+    @UploadedFiles() files,
+  ) {
+    return this.newsService.update(id, data, files);
   }
 
   @Delete('/:id')
@@ -76,5 +89,10 @@ export class NewsController {
   @Get('/getPhotosList/:id')
   private async getPhotosList(@Param('id') id: number) {
     return this.newsService.getPhotosList(id);
+  }
+
+  @Get('/deleteImage/:id')
+  private async deleteImage(@Param('id') id: number) {
+    return this.newsService.deleteImage(id);
   }
 }

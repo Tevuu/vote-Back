@@ -62,11 +62,18 @@ export class NewsService {
     return this.findById(newsId);
   }
 
-  public async update(id: number, data: CreateNewsDTO): Promise<NewsEntity> {
+  public async update(
+    id: number,
+    data: CreateNewsDTO,
+    files,
+  ): Promise<NewsEntity> {
+    const createdFile = await this.filesService.uploadMultipleFiles(files);
+    const newsImages = createdFile.data.map((item) => item.filename);
+
     await this.news
       .createQueryBuilder()
       .update()
-      .set(data)
+      .set({ ...data, photos: [...newsImages] })
       .where('id = :id', { id })
       .execute();
 
@@ -101,5 +108,20 @@ export class NewsService {
       .getOne();
 
     return photos ? photos.photos : [];
+  }
+
+  public async deleteImage(id: number) {
+    const news = await this.findById(id);
+
+    await this.news
+      .createQueryBuilder()
+      .update()
+      .set({
+        photos: [],
+      })
+      .where('id = :id', { id })
+      .execute();
+
+    return news;
   }
 }

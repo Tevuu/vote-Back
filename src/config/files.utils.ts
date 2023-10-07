@@ -1,7 +1,6 @@
 import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-// Разрешить только изображения
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(
@@ -14,6 +13,7 @@ export const imageFileFilter = (req, file, callback) => {
   }
   callback(null, true);
 };
+
 export const editFileName = (req, file, callback) => {
   const name = file.originalname.split(' ').join('').split('.')[0];
   const fileExtName = extname(file.originalname);
