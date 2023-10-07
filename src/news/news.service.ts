@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
 import { NewsEntity } from './entities/News.entity';
 import { CreateNewsDTO } from './dto/news.dto';
 import { FilesService } from 'src/files/files.service';
@@ -113,6 +114,12 @@ export class NewsService {
   public async deleteImage(id: number) {
     const news = await this.findById(id);
 
+    news.photos.map((photo) =>
+      fs.unlink(`./uploads/${photo}`, (err) => {
+        if (err) throw err;
+      }),
+    );
+
     await this.news
       .createQueryBuilder()
       .update()
@@ -122,6 +129,6 @@ export class NewsService {
       .where('id = :id', { id })
       .execute();
 
-    return news;
+    return this.findById(id);
   }
 }
