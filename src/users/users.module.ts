@@ -6,9 +6,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersController } from './users.controller';
 import { UsersEntity } from './entities/users.entity';
 import { RolesModule } from 'src/roles/roles.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
-  imports: [RolesModule, TypeOrmModule.forFeature([UsersEntity, RolesEntity])],
+  imports: [
+    FilesModule,
+    RolesModule,
+    TypeOrmModule.forFeature([UsersEntity, RolesEntity]),
+  ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

@@ -6,9 +6,14 @@ import {
   Body,
   Put,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { UsersService } from './users.service';
 import { UsersEntity } from './entities/users.entity';
+import { editFileName, imageFileFilter } from '../config/files.utils';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
 
 @Controller('users')
@@ -64,8 +69,20 @@ export class UsersController {
     return this.usersService.removeRoleByTitle(userId, roleName);
   }
 
-  // @Get('/getByGrup/:grup')
-  // private async findAllByGrup(@Param('grup') grup: string) {
-  //   return this.usersService.findAllByGrup(grup);
-  // }
+  @Post('setProfilePicture/:id')
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      storage: diskStorage({
+        destination: './uploads/profilePictures',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  private async setProfilePicture(
+    @Param('id') id: number,
+    @UploadedFile() file,
+  ) {
+    return this.usersService.setProfilePicture(id, file);
+  }
 }

@@ -53,7 +53,7 @@ export class NewsController {
   @UseInterceptors(
     FilesInterceptor('image', 10, {
       storage: diskStorage({
-        destination: './uploads',
+        destination: './uploads/newsPictures',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -67,7 +67,7 @@ export class NewsController {
   @UseInterceptors(
     FilesInterceptor('image', 10, {
       storage: diskStorage({
-        destination: './uploads',
+        destination: './uploads/newsPictures',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,

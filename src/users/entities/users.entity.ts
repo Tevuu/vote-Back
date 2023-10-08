@@ -31,4 +31,7 @@ export class UsersEntity extends BaseEntity {
 
   @Column({ type: 'simple-array', nullable: false })
   roles: string[];
+
+  @Column({ nullable: true, default: null })
+  profile_picture: string;
 }

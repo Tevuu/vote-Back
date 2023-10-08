@@ -115,7 +115,7 @@ export class NewsService {
     const news = await this.findById(id);
 
     news.photos.map((photo) =>
-      fs.unlink(`./uploads/${photo}`, (err) => {
+      fs.unlink(`./uploads/newsPictures/${photo}`, (err) => {
         if (err) throw err;
       }),
     );

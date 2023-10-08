@@ -4,6 +4,7 @@ import { UsersEntity } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
 import { RolesService } from 'src/roles/roles.service';
+import * as fs from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -85,5 +86,26 @@ export class UsersService {
       .remove((await this.roles.getByName(roleName)).id);
 
     return this.findById(userId);
+  }
+
+  async setProfilePicture(id: number, picture) {
+    const user = await this.findById(id);
+
+    if (user.profile_picture) {
+      fs.unlink(`./uploads/profilePictures/${user.profile_picture}`, (err) => {
+        if (err) throw err;
+      });
+    }
+
+    await this.users
+      .createQueryBuilder()
+      .update()
+      .set({
+        profile_picture: picture.filename,
+      })
+      .where('id = :id', { id })
+      .execute();
+
+    return this.findById(id);
   }
 }
