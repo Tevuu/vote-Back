@@ -44,8 +44,13 @@ export class FilesController {
     return this.filesService.uploadMultipleFiles(files);
   }
 
-  @Get(':imagename')
-  getImage(@Param('imagename') image, @Res() res) {
-    return this.filesService.getImage(image, res);
+  @Get('/getNewsPicture/:imagename')
+  getNewsImage(@Param('imagename') image, @Res() res) {
+    return this.filesService.getNewsImage(image, res);
+  }
+
+  @Get('/getProfilePicture/:imagename')
+  getProfileImage(@Param('imagename') image, @Res() res) {
+    return this.filesService.getProfileImage(image, res);
   }
 }

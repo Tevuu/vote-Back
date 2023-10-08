@@ -32,8 +32,16 @@ export class FilesService {
     };
   }
 
-  public async getImage(image, res) {
+  public async getNewsImage(image, res) {
     const response = res.sendFile(image, { root: './uploads/newsPictures' });
+    return {
+      status: HttpStatus.OK,
+      data: { response },
+    };
+  }
+
+  public async getProfileImage(image, res) {
+    const response = res.sendFile(image, { root: './uploads/profilePictures' });
     return {
       status: HttpStatus.OK,
       data: { response },
