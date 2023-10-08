@@ -33,7 +33,7 @@ export class FilesService {
   }
 
   public async getImage(image, res) {
-    const response = res.sendFile(image, { root: './uploads' });
+    const response = res.sendFile(image, { root: './uploads/newsPictures' });
     return {
       status: HttpStatus.OK,
       data: { response },
