@@ -7,11 +7,9 @@ import {
   Param,
   Body,
   UseInterceptors,
-  UploadedFile,
   UploadedFiles,
-  Res,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../config/files.utils';
 import { NewsService } from './news.service';
@@ -34,20 +32,6 @@ export class NewsController {
   private async findByGrup(@Param('grup') grup: string) {
     return this.newsService.findByGrup(grup);
   }
-
-  // @Post('/')
-  // @UseInterceptors(
-  //   FileInterceptor('image', {
-  //     storage: diskStorage({
-  //       destination: './uploads',
-  //       filename: editFileName,
-  //     }),
-  //     fileFilter: imageFileFilter,
-  //   }),
-  // )
-  // private async create(@Body() data, @UploadedFile() file) {
-  //   return this.newsService.create(data, file);
-  // }
 
   @Post('')
   @UseInterceptors(

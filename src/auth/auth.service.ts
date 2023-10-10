@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { config } from 'dotenv';
-import { AuthUserDTO } from 'src/users/dto/users.dto';
 import { UsersEntity } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
+import { AuthUserDTO } from 'src/users/dto/users.dto';
 
 config();
 

@@ -7,7 +7,6 @@ import {
   UploadedFiles,
   Res,
   Param,
-  HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
