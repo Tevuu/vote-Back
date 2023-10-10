@@ -2,6 +2,7 @@
 /uploads/newsPictures
 /uploads/profilePictures/*
 !/uploads/profilePictures/stockPicture.png
+!/uploads/profilePictures/header.jpg
 
 
 # compiled output
