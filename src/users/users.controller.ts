@@ -69,7 +69,7 @@ export class UsersController {
     return this.usersService.removeRoleByTitle(userId, roleName);
   }
 
-  @Post('setProfilePicture/:id')
+  @Put('setProfilePicture/:id')
   @UseInterceptors(
     FileInterceptor('picture', {
       storage: diskStorage({
@@ -82,7 +82,8 @@ export class UsersController {
   private async setProfilePicture(
     @Param('id') id: number,
     @UploadedFile() file,
+    @Body() bio,
   ) {
-    return this.usersService.setProfilePicture(id, file);
+    return this.usersService.setProfilePicture(id, file, bio);
   }
 }

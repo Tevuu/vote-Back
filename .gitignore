@@ -1,5 +1,8 @@
 *.env
-/uploads/**
+/uploads/newsPictures
+/uploads/profilePictures/*
+!/uploads/profilePictures/stockPicture.png
+
 
 # compiled output
 /dist

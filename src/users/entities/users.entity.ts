@@ -20,11 +20,8 @@ export class UsersEntity extends BaseEntity {
   @Column({ nullable: false })
   password: string;
 
-  // @ManyToMany(() => RolesEntity, (roles) => roles.users)
-  // @JoinTable({
-  //   name: 'users_roles',
-  // })
-  // roles: RolesEntity[];
+  @Column({ nullable: true, default: null })
+  bio: string;
 
   @Column({ type: 'simple-array', nullable: false })
   grup: string[];

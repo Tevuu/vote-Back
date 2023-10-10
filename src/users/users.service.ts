@@ -88,23 +88,39 @@ export class UsersService {
     return this.findById(userId);
   }
 
-  async setProfilePicture(id: number, picture) {
-    const user = await this.findById(id);
+  async setProfilePicture(id: number, picture, bio) {
+    if (picture) {
+      const user = await this.findById(id);
 
-    if (user.profile_picture) {
-      fs.unlink(`./uploads/profilePictures/${user.profile_picture}`, (err) => {
-        if (err) throw err;
-      });
+      if (user.profile_picture) {
+        fs.unlink(
+          `./uploads/profilePictures/${user.profile_picture}`,
+          (err) => {
+            if (err) throw err;
+          },
+        );
+      }
+
+      await this.users
+        .createQueryBuilder()
+        .update()
+        .set({
+          profile_picture: picture.filename,
+        })
+        .where('id = :id', { id })
+        .execute();
     }
 
-    await this.users
-      .createQueryBuilder()
-      .update()
-      .set({
-        profile_picture: picture.filename,
-      })
-      .where('id = :id', { id })
-      .execute();
+    if (bio) {
+      await this.users
+        .createQueryBuilder()
+        .update()
+        .set({
+          bio: bio.bio,
+        })
+        .where('id = :id', { id })
+        .execute();
+    }
 
     return this.findById(id);
   }
