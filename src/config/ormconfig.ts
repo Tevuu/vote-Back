@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { UsersEntity } from 'src/users/entities/users.entity';
 import { RolesEntity } from 'src/roles/entities/roles.entity';
 import { NewsEntity } from 'src/news/entities/News.entity';
+import { VoteEntity } from 'src/vote/entities/vote.entity';
 
 config();
 
@@ -16,7 +17,7 @@ export default new DataSource({
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
-  entities: [UsersEntity, RolesEntity, NewsEntity],
+  entities: [UsersEntity, RolesEntity, NewsEntity, VoteEntity],
   migrations: [__dirname + '/**/migration/*{.ts,.js}'],
   migrationsRun: true,
 });

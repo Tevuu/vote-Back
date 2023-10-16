@@ -6,8 +6,8 @@ import { NewsModule } from './news/news.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
-import { TokenModule } from './token/token.module';
 import { FilesModule } from './files/files.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -37,8 +37,8 @@ import { FilesModule } from './files/files.module';
     UsersModule,
     RolesModule,
     AuthModule,
-    TokenModule,
     FilesModule,
+    VoteModule,
   ],
 })
 export class AppModule {}
