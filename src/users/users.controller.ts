@@ -86,4 +86,11 @@ export class UsersController {
   ) {
     return this.usersService.setProfilePicture(id, file, bio);
   }
+
+  @Get('getPhotoByEmail/:email')
+  private async getPhotoByEmail(
+    @Param('email') email: string,
+  ): Promise<string> {
+    return this.usersService.getPhotoByEmail(email);
+  }
 }

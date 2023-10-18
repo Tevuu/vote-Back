@@ -124,4 +124,8 @@ export class UsersService {
 
     return this.findById(id);
   }
+
+  public async getPhotoByEmail(email: string): Promise<string> {
+    return this.findByEmail(email).then((response) => response.profile_picture);
+  }
 }
