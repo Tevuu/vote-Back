@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { RolesService } from 'src/roles/roles.service';
 import { UsersEntity } from './entities/users.entity';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +13,7 @@ export class UsersService {
     @InjectRepository(UsersEntity)
     private readonly users: Repository<UsersEntity>,
     private readonly roles: RolesService,
+    private readonly files: FilesService,
   ) {}
 
   public async findAll(): Promise<UsersEntity[]> {
@@ -125,9 +127,11 @@ export class UsersService {
     return this.findById(id);
   }
 
-  public async getPhotoByEmail(email: string): Promise<string> {
-    return this.findByEmail(email).then(
+  public async getPhotoByEmail(email: string, res) {
+    const photo = await this.findByEmail(email).then(
       (response) => response.profile_picture ?? 'stockPicture.png',
     );
+
+    return this.files.getProfileImage(photo, res);
   }
 }

@@ -5,6 +5,7 @@ import {
   Param,
   Body,
   Put,
+  Res,
   Delete,
   UseInterceptors,
   UploadedFile,
@@ -88,9 +89,7 @@ export class UsersController {
   }
 
   @Get('getPhotoByEmail/:email')
-  private async getPhotoByEmail(
-    @Param('email') email: string,
-  ): Promise<string> {
-    return this.usersService.getPhotoByEmail(email);
+  private async getPhotoByEmail(@Param('email') email: string, @Res() res) {
+    return this.usersService.getPhotoByEmail(email, res);
   }
 }
