@@ -126,6 +126,8 @@ export class UsersService {
   }
 
   public async getPhotoByEmail(email: string): Promise<string> {
-    return this.findByEmail(email).then((response) => response.profile_picture);
+    return this.findByEmail(email).then(
+      (response) => response.profile_picture ?? 'stockPicture.png',
+    );
   }
 }
