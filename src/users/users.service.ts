@@ -128,10 +128,10 @@ export class UsersService {
   }
 
   public async getPhotoByEmail(email: string, res) {
-    const photo = await this.findByEmail(email).then(
-      (response) => response.profile_picture ?? 'stockPicture.png',
+    const photo = await this.findByEmail(email).then((response) =>
+      response ? response.profile_picture : 'stockPicture.png',
     );
 
-    return this.files.getProfileImage(photo, res);
+    return this.files.getProfileImage(photo ?? 'stockPicture.png', res);
   }
 }
