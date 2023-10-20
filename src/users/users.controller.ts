@@ -16,31 +16,67 @@ import { UsersService } from './users.service';
 import { UsersEntity } from './entities/users.entity';
 import { editFileName, imageFileFilter } from '../config/files.utils';
 import { CreateUserDTO, UpdateUserDTO } from './dto/users.dto';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Пользователи')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Возвращает множество пользователей' })
+  @ApiOkResponse({
+    description: 'Множество пользователей',
+  })
   @Get()
   private getAll(): Promise<UsersEntity[]> {
     return this.usersService.findAll();
   }
 
+  @ApiOperation({
+    summary: 'Возвращает пользователя по уникальному идентифекатору',
+  })
+  @ApiOkResponse({
+    description: 'Пользователь, согласно заданному запросу',
+  })
+  @ApiNotFoundResponse({
+    description: 'Запрошенный пользователь с таким id не найден',
+  })
   @Get(':id')
   private getById(@Param('id') id: number): Promise<UsersEntity> {
     return this.usersService.findById(id);
   }
 
+  @ApiOperation({
+    summary: 'Возвращает пользователя по почте',
+  })
+  @ApiOkResponse({
+    description: 'Пользователь, согласно заданному запросу',
+  })
+  @ApiNotFoundResponse({
+    description: 'Запрошенный пользователь с такой почтой не найден',
+  })
   @Get('/email/:email')
   private getByEmail(@Param('email') email: string): Promise<UsersEntity> {
     return this.usersService.findByEmail(email);
   }
 
+  @ApiOperation({ summary: 'Создает пользователя' })
+  @ApiOkResponse({
+    description: 'Созданный пользователь в соответствии заданному запросу',
+  })
   @Post()
   private create(@Body() data: CreateUserDTO): Promise<UsersEntity> {
     return this.usersService.create(data);
   }
 
+  @ApiOperation({ summary: 'Обновляет запрашиваемого пользователя' })
+  @ApiOkResponse({ description: 'Обновленный пользователь' })
+  @ApiNotFoundResponse({ description: 'Запрашиваемый пользователь не найден' })
   @Put(':id')
   private update(
     @Param('id') id: number,
@@ -49,6 +85,9 @@ export class UsersController {
     return this.usersService.update(id, data);
   }
 
+  @ApiOperation({ summary: 'Удаляет запрашиваемого пользователя' })
+  @ApiOkResponse({ description: 'Удаленный пользователь' })
+  @ApiNotFoundResponse({ description: 'Запрашиваемый пользователь не найден' })
   @Delete(':id')
   private destroy(@Param('id') id: number): Promise<UsersEntity> {
     return this.usersService.destroy(id);
