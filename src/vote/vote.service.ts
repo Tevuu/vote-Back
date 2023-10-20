@@ -22,15 +22,15 @@ export class VoteService {
       .getOne();
   }
 
-  public async create(data: CreateVoteDTO): Promise<VoteEntity> {
-    const id = await this.vote
-      .createQueryBuilder()
-      .insert()
-      .values(data)
-      .execute()
-      .then((response) => response.identifiers[0].id);
-
-    return this.findById(id);
+  public async create(data: CreateVoteDTO) {
+    // const id = await this.vote
+    //   .createQueryBuilder()
+    //   .insert()
+    //   .values(data)
+    //   .execute()
+    //   .then((response) => response.identifiers[0].id);
+    // return this.findById(id);
+    return data.elected;
   }
 
   public async toVote(voteId: number, userId: number) {

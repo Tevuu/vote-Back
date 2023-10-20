@@ -26,7 +26,7 @@ export class VoteController {
   }
 
   @Post()
-  private async create(@Body() data: CreateVoteDTO): Promise<VoteEntity> {
+  private async create(@Body() data: CreateVoteDTO) {
     return this.voteService.create(data);
   }
 
