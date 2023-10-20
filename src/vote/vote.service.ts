@@ -22,7 +22,7 @@ export class VoteService {
       .getOne();
   }
 
-  public async create(data: CreateVoteDTO) {
+  public async create(data: CreateVoteDTO): Promise<VoteEntity> {
     const id = await this.vote
       .createQueryBuilder()
       .insert()
@@ -51,5 +51,15 @@ export class VoteService {
       .execute();
 
     return this.findById(voteId);
+  }
+
+  public async destroy(id: number): Promise<VoteEntity> {
+    await this.vote
+      .createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
+
+    return this.findById(id);
   }
 }

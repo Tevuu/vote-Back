@@ -26,7 +26,7 @@ export class VoteController {
   }
 
   @Post()
-  private async create(@Body() data: CreateVoteDTO) {
+  private async create(@Body() data: CreateVoteDTO): Promise<VoteEntity> {
     return this.voteService.create(data);
   }
 
@@ -36,5 +36,10 @@ export class VoteController {
     @Param('userId') userId: number,
   ) {
     return this.voteService.toVote(voteId, userId);
+  }
+
+  @Delete(':id')
+  private async destroy(@Param('id') id: number): Promise<VoteEntity> {
+    return this.voteService.destroy(id);
   }
 }
