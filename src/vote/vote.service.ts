@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VoteEntity } from './entities/vote.entity';
 import { Repository } from 'typeorm';
-import { CreateVoteDTO } from './dto/vote.dto';
+import { CreateVoteDTO, UpdateVoteDTO } from './dto/vote.dto';
 
 @Injectable()
 export class VoteService {
@@ -57,6 +57,17 @@ export class VoteService {
     await this.vote
       .createQueryBuilder()
       .delete()
+      .where('id = :id', { id })
+      .execute();
+
+    return this.findById(id);
+  }
+
+  public async update(id: number, data: UpdateVoteDTO): Promise<VoteEntity> {
+    await this.vote
+      .createQueryBuilder()
+      .update()
+      .set(data)
       .where('id = :id', { id })
       .execute();
 

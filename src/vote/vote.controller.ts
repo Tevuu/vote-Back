@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { VoteService } from './vote.service';
-import { CreateVoteDTO } from './dto/vote.dto';
+import { CreateVoteDTO, UpdateVoteDTO } from './dto/vote.dto';
 import { VoteEntity } from './entities/vote.entity';
 
 @Controller('vote')
@@ -36,6 +36,14 @@ export class VoteController {
     @Param('userId') userId: number,
   ) {
     return this.voteService.toVote(voteId, userId);
+  }
+
+  @Put(':id')
+  private async update(
+    @Param('id') id: number,
+    data: UpdateVoteDTO,
+  ): Promise<VoteEntity> {
+    return this.voteService.update(id, data);
   }
 
   @Delete(':id')
