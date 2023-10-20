@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { VoteEntity } from './entities/vote.entity';
 import { Repository } from 'typeorm';
 import { CreateVoteDTO, UpdateVoteDTO } from './dto/vote.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class VoteService {
   constructor(
     @InjectRepository(VoteEntity) private readonly vote: Repository<VoteEntity>,
+    private readonly users: UsersService,
   ) {}
 
   public async findAll(): Promise<VoteEntity[]> {
@@ -43,19 +45,28 @@ export class VoteService {
     try {
       const vote = await this.vote
         .createQueryBuilder('vote')
-        .select('vote.votedPersonsId')
+        .select()
         .where('id = :id', { id: voteId })
-        .getMany();
+        .getOne();
+
+      const user = await this.users.findById(userId);
+
+      if (!user) {
+        return false;
+      }
+
+      const votedPersons = vote.votedPersonsId ?? [];
 
       await this.vote
         .createQueryBuilder()
         .update()
         .set({
-          voteCount: vote[0].voteCount + 1,
-          votedPersonsId: [...vote[0].votedPersonsId, userId],
+          voteCount: vote.voteCount + 1,
+          votedPersonsId: [...votedPersons, userId],
         })
         .where('id = :id', { id: voteId })
         .execute();
+
       return true;
     } catch {
       return false;
