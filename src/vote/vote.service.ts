@@ -51,7 +51,7 @@ export class VoteService {
 
       const user = await this.users.findById(userId);
 
-      if (!user) {
+      if (!user || !vote) {
         return false;
       }
 
