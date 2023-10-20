@@ -34,18 +34,18 @@ export class VoteService {
   }
 
   public async toVote(voteId: number, userId: number) {
-    const votedPersonsId = await this.vote
+    const vote = await this.vote
       .createQueryBuilder('vote')
       .select('vote.votedPersonsId')
       .where('id = :id', { id: voteId })
-      .getMany()
-      .then((response) => response[0].votedPersonsId);
+      .getMany();
 
     await this.vote
       .createQueryBuilder()
       .update()
       .set({
-        votedPersonsId: [...votedPersonsId, userId],
+        voteCount: vote[0].voteCount + 1,
+        votedPersonsId: [...vote[0].votedPersonsId, userId],
       })
       .where('id = :id', { id: voteId })
       .execute();
