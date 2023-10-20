@@ -23,14 +23,13 @@ export class VoteService {
   }
 
   public async create(data: CreateVoteDTO) {
-    // const id = await this.vote
-    //   .createQueryBuilder()
-    //   .insert()
-    //   .values(data)
-    //   .execute()
-    //   .then((response) => response.identifiers[0].id);
-    // return this.findById(id);
-    return data.elected;
+    const id = await this.vote
+      .createQueryBuilder()
+      .insert()
+      .values(data)
+      .execute()
+      .then((response) => response.identifiers[0].id);
+    return this.findById(id);
   }
 
   public async toVote(voteId: number, userId: number) {
