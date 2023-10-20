@@ -26,12 +26,7 @@ export class VoteService {
     const id = await this.vote
       .createQueryBuilder()
       .insert()
-      .values({
-        header: data.header,
-        grup: data.grup,
-        endedAt: data.endedAt,
-        elected: data.elected.split(' '),
-      })
+      .values(data)
       .execute()
       .then((response) => response.identifiers[0].id);
 
