@@ -40,23 +40,26 @@ export class VoteService {
   }
 
   public async toVote(voteId: number, userId: number) {
-    const vote = await this.vote
-      .createQueryBuilder('vote')
-      .select('vote.votedPersonsId')
-      .where('id = :id', { id: voteId })
-      .getMany();
+    try {
+      const vote = await this.vote
+        .createQueryBuilder('vote')
+        .select('vote.votedPersonsId')
+        .where('id = :id', { id: voteId })
+        .getMany();
 
-    await this.vote
-      .createQueryBuilder()
-      .update()
-      .set({
-        voteCount: vote[0].voteCount + 1,
-        votedPersonsId: [...vote[0].votedPersonsId, userId],
-      })
-      .where('id = :id', { id: voteId })
-      .execute();
-
-    return this.findById(voteId);
+      await this.vote
+        .createQueryBuilder()
+        .update()
+        .set({
+          voteCount: vote[0].voteCount + 1,
+          votedPersonsId: [...vote[0].votedPersonsId, userId],
+        })
+        .where('id = :id', { id: voteId })
+        .execute();
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   public async destroy(id: number): Promise<VoteEntity> {
