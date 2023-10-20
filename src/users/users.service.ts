@@ -134,4 +134,16 @@ export class UsersService {
 
     return this.files.getProfileImage(photo ?? 'stockPicture.png', res);
   }
+
+  public async getNameByEmail(email: string): Promise<string> {
+    const userFIO = await this.users
+      .createQueryBuilder('users')
+      .select(['users.firstName', 'users.secondName', 'users.thirdName'])
+      .where('email = :email', { email })
+      .getOne();
+
+    return `${
+      userFIO.secondName + ' ' + userFIO.firstName + ' ' + userFIO.thirdName
+    }`;
+  }
 }

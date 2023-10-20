@@ -131,4 +131,14 @@ export class UsersController {
   private async getPhotoByEmail(@Param('email') email: string, @Res() res) {
     return this.usersService.getPhotoByEmail(email, res);
   }
+
+  @ApiOperation({ summary: 'Возвращает ФИО запрашиваемого пользователя' })
+  @ApiOkResponse({ description: 'Запрашиваемый пользователь' })
+  @ApiNotFoundResponse({
+    description: 'Запрашиваемый пользователь с такой почтой не найден',
+  })
+  @Get('getNameByEmail/:email')
+  private async getNameByEmail(@Param('email') email: string): Promise<string> {
+    return this.usersService.getNameByEmail(email);
+  }
 }

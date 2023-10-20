@@ -13,16 +13,32 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../config/files.utils';
 import { NewsService } from './news.service';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Новости')
 @Controller('news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
+  @ApiOperation({ summary: 'Возвращает множество новостей' })
+  @ApiOkResponse({
+    description: 'Множество новостей',
+  })
   @Get('/')
   private async findAll() {
     return this.newsService.findAll();
   }
 
+  @ApiOperation({ summary: 'Возвращает новость' })
+  @ApiOkResponse({
+    description: 'Новость, согласно заданному запросу',
+  })
+  @ApiNotFoundResponse({ description: 'Запрошенная новость не найдена' })
   @Get('/:id')
   private async findById(@Param('id') id: number) {
     return this.newsService.findById(id);
@@ -33,6 +49,10 @@ export class NewsController {
     return this.newsService.findByGrup(grup);
   }
 
+  @ApiOperation({ summary: 'Создает новость' })
+  @ApiOkResponse({
+    description: 'Созданная новость в соответствии заданному запросу',
+  })
   @Post('')
   @UseInterceptors(
     FilesInterceptor('image', 10, {
@@ -47,6 +67,9 @@ export class NewsController {
     return this.newsService.createWithSomeImages(data, files);
   }
 
+  @ApiOperation({ summary: 'Обновляет запрашиваемую новость' })
+  @ApiOkResponse({ description: 'Обновленная новость' })
+  @ApiNotFoundResponse({ description: 'Запрашиваемая новость не найдена' })
   @Put('/:id')
   @UseInterceptors(
     FilesInterceptor('image', 10, {
@@ -65,6 +88,9 @@ export class NewsController {
     return this.newsService.update(id, data, files);
   }
 
+  @ApiOperation({ summary: 'Удаляет запрашиваемую новость' })
+  @ApiOkResponse({ description: 'Удаленная новость' })
+  @ApiNotFoundResponse({ description: 'Запрашиваемая новость не найдена' })
   @Delete('/:id')
   private async destroy(@Param('id') id: number) {
     return this.newsService.destroy(id);
