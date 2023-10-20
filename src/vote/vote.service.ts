@@ -26,9 +26,15 @@ export class VoteService {
     const id = await this.vote
       .createQueryBuilder()
       .insert()
-      .values(data)
+      .values({
+        header: data.header,
+        grup: data.grup,
+        endedAt: data.endedAt,
+        elected: data.elected.split(' '),
+      })
       .execute()
       .then((response) => response.identifiers[0].id);
+
     return this.findById(id);
   }
 
