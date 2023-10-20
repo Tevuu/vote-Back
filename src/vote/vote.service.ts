@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VoteEntity } from './entities/vote.entity';
 import { Repository } from 'typeorm';
@@ -15,11 +15,17 @@ export class VoteService {
   }
 
   public async findById(id: number): Promise<VoteEntity> {
-    return this.vote
-      .createQueryBuilder()
-      .select()
-      .where('id = :id', { id })
-      .getOne();
+    try {
+      return this.vote
+        .createQueryBuilder()
+        .select()
+        .where('id = :id', { id })
+        .getOne();
+    } catch {
+      throw new NotFoundException({
+        message: 'Запрошенное голосование не найдено',
+      });
+    }
   }
 
   public async create(data: CreateVoteDTO): Promise<VoteEntity> {
@@ -64,6 +70,14 @@ export class VoteService {
   }
 
   public async update(id: number, data: UpdateVoteDTO): Promise<VoteEntity> {
+    const vote = await this.findById(id);
+
+    if (!vote) {
+      throw new NotFoundException({
+        message: 'Запрошенное голосование не найдено',
+      });
+    }
+
     await this.vote
       .createQueryBuilder()
       .update()
