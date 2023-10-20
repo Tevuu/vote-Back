@@ -15,4 +15,5 @@ export class AuthUserDTO extends OmitType(UsersEntity, [
   'thirdName',
   'profile_picture',
   'bio',
+  'secondName',
 ]) {}
