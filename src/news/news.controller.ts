@@ -19,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { UpdateNewsDTO } from './dto/news.dto';
 
 @ApiTags('Новости')
 @Controller('news')
@@ -82,7 +83,7 @@ export class NewsController {
   )
   private async update(
     @Param('id') id: number,
-    @Body() data,
+    @Body() data: UpdateNewsDTO,
     @UploadedFiles() files,
   ) {
     return this.newsService.update(id, data, files);

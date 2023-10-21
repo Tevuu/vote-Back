@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { NewsEntity } from './entities/News.entity';
-import { CreateNewsDTO } from './dto/news.dto';
+import { CreateNewsDTO, UpdateNewsDTO } from './dto/news.dto';
 import { FilesService } from 'src/files/files.service';
 
 @Injectable()
@@ -65,18 +65,36 @@ export class NewsService {
 
   public async update(
     id: number,
-    data: CreateNewsDTO,
+    data: UpdateNewsDTO,
     files,
   ): Promise<NewsEntity> {
-    const createdFile = await this.filesService.uploadMultipleFiles(files);
-    const newsImages = createdFile.data.map((item) => item.filename);
+    if (files.length) {
+      const createdFile = await this.filesService.uploadMultipleFiles(files);
+      const newsImages = createdFile.data.map((item) => item.filename);
 
-    await this.news
-      .createQueryBuilder()
-      .update()
-      .set({ ...data, photos: [...newsImages] })
-      .where('id = :id', { id })
-      .execute();
+      await this.news
+        .createQueryBuilder()
+        .update()
+        .set({
+          header: data.header,
+          grup: data.grup,
+          content: data.content,
+          photos: [...newsImages],
+        })
+        .where('id = :id', { id })
+        .execute();
+    } else {
+      await this.news
+        .createQueryBuilder()
+        .update()
+        .set({
+          header: data.header,
+          grup: data.grup,
+          content: data.content,
+        })
+        .where('id = :id', { id })
+        .execute();
+    }
 
     return this.findById(id);
   }
