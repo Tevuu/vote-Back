@@ -6,6 +6,7 @@ export class CreateVoteDTO extends OmitType(VoteEntity, [
   'votedPersonsId',
   'createdAt',
   'voteCount',
+  'votes',
 ]) {}
 
 export class UpdateVoteDTO extends PartialType(CreateVoteDTO) {}

@@ -26,6 +26,13 @@ export class VoteEntity {
   elected: string[];
 
   @ApiProperty({
+    type: Number,
+    isArray: true,
+  })
+  @Column({ type: 'simple-array' })
+  votes: number[];
+
+  @ApiProperty({
     type: String,
     isArray: true,
     nullable: true,

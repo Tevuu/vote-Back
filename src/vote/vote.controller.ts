@@ -56,12 +56,13 @@ export class VoteController {
     description: 'Голосование, согласно заданному запросу',
   })
   @ApiNotFoundResponse({ description: 'Запрошенное голосование не найдено' })
-  @Get('toVote/:voteId/:userId')
+  @Get('toVote/:voteId/:userId/:elected')
   private async toVote(
     @Param('voteId') voteId: number,
     @Param('userId') userId: number,
+    @Param('elected') elected: string,
   ) {
-    return this.voteService.toVote(voteId, userId);
+    return this.voteService.toVote(voteId, userId, elected);
   }
 
   @ApiOperation({ summary: 'Обновляет запрашиваемое голосование' })

@@ -34,14 +34,14 @@ export class VoteService {
     const id = await this.vote
       .createQueryBuilder()
       .insert()
-      .values(data)
+      .values({ ...data, votes: data.elected.map(() => 0) })
       .execute()
       .then((response) => response.identifiers[0].id);
 
     return this.findById(id);
   }
 
-  public async toVote(voteId: number, userId: number) {
+  public async toVote(voteId: number, userId: number, elected: string) {
     try {
       const vote = await this.vote
         .createQueryBuilder('vote')
@@ -55,6 +55,10 @@ export class VoteService {
         return false;
       }
 
+      const electedIndex = await vote.elected.findIndex(
+        (item) => item === elected,
+      );
+
       const votedPersons = vote.votedPersonsId ?? [];
 
       await this.vote
@@ -63,6 +67,13 @@ export class VoteService {
         .set({
           voteCount: vote.voteCount + 1,
           votedPersonsId: [...votedPersons, userId],
+          votes: vote.votes.map((item, index) => {
+            if (index === electedIndex) {
+              return Number(item) + 1;
+            }
+
+            return item;
+          }),
         })
         .where('id = :id', { id: voteId })
         .execute();
