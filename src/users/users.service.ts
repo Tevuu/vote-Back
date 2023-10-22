@@ -142,8 +142,12 @@ export class UsersService {
       .where('email = :email', { email })
       .getOne();
 
-    return `${
-      userFIO.secondName + ' ' + userFIO.firstName + ' ' + userFIO.thirdName
-    }`;
+    if (userFIO) {
+      return `${
+        userFIO.secondName + ' ' + userFIO.firstName + ' ' + userFIO.thirdName
+      }`;
+    } else {
+      return email;
+    }
   }
 }
