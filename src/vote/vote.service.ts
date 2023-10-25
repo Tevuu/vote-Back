@@ -4,6 +4,7 @@ import { VoteEntity } from './entities/vote.entity';
 import { Repository } from 'typeorm';
 import { CreateVoteDTO, UpdateVoteDTO } from './dto/vote.dto';
 import { UsersService } from 'src/users/users.service';
+import { findIndex } from 'rxjs';
 
 @Injectable()
 export class VoteService {
@@ -111,5 +112,55 @@ export class VoteService {
       .execute();
 
     return this.findById(id);
+  }
+
+  public async getAllByGrup(grup: string): Promise<VoteEntity[]> {
+    return this.vote
+      .createQueryBuilder()
+      .select()
+      .where('grup = :grup', { grup })
+      .orWhere('grup = :NKE', { NKE: 'NKE' })
+      .getMany();
+  }
+
+  public async getWinner(id: number) {
+    const vote = await this.findById(id);
+
+    let winnerVotes = 0;
+
+    for (let i = 0; i < vote.votes.length; i++) {
+      if (vote.votes[i] > winnerVotes) {
+        winnerVotes = vote.votes[i];
+      }
+    }
+
+    const winnerVotesIndex = vote.votes.findIndex(
+      (item) => item == winnerVotes,
+    );
+
+    const winnerEmail = vote.elected[winnerVotesIndex];
+
+    return this.users.getNameByEmail(winnerEmail);
+  }
+
+  public async getVotesCountByEmail(email: string, voteId: number) {
+    const vote = await this.findById(voteId);
+
+    const electedIndex = vote.elected.findIndex((item) => item == email);
+
+    return vote.votes[electedIndex];
+  }
+
+  public async getVotesByGrup(voteId: number, grup: string | number) {
+    const vote = await this.findById(voteId);
+    const votedPersons = [];
+
+    for (let i = 0; i < vote.votedPersonsId.length; i++) {
+      votedPersons.push(await this.users.findById(vote.votedPersonsId[i]));
+    }
+
+    return votedPersons.filter((item) =>
+      item.grup.find((item) => item == grup),
+    );
   }
 }

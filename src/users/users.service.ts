@@ -150,4 +150,20 @@ export class UsersService {
       return email;
     }
   }
+
+  public async emailWithoutPass(email: string) {
+    return this.users
+      .createQueryBuilder('users')
+      .select([
+        'users.firstName',
+        'users.secondName',
+        'users.thirdName',
+        'users.bio',
+        'users.grup',
+        'users.roles',
+        'users.profile_picture',
+      ])
+      .where('email = :email', { email })
+      .getOne();
+  }
 }

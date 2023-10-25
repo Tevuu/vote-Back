@@ -141,4 +141,9 @@ export class UsersController {
   private async getNameByEmail(@Param('email') email: string): Promise<string> {
     return this.usersService.getNameByEmail(email);
   }
+
+  @Get('emailWithoutPass/:email')
+  private async emailWithoutPass(@Param('email') email: string) {
+    return this.usersService.emailWithoutPass(email);
+  }
 }

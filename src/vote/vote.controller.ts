@@ -32,6 +32,13 @@ export class VoteController {
     return this.voteService.findAll();
   }
 
+  @Get('getAllByGrup/:grup')
+  private async getAllByGrup(
+    @Param('grup') grup: string,
+  ): Promise<VoteEntity[]> {
+    return this.voteService.getAllByGrup(grup);
+  }
+
   @ApiOperation({ summary: 'Возвращает голосование' })
   @ApiOkResponse({
     description: 'Голосование, согласно заданному запросу',
@@ -82,5 +89,26 @@ export class VoteController {
   @Delete(':id')
   private async destroy(@Param('id') id: number): Promise<VoteEntity> {
     return this.voteService.destroy(id);
+  }
+
+  @Get('getWinner/:id')
+  private async getWinner(@Param('id') id: number) {
+    return this.voteService.getWinner(id);
+  }
+
+  @Get('getVotesCountByEmail/:voteId/:email')
+  private getVotesCountByEmail(
+    @Param('email') email: string,
+    @Param('voteId') voteId: number,
+  ) {
+    return this.voteService.getVotesCountByEmail(email, voteId);
+  }
+
+  @Get('getVotesByGrup/:voteId/:grup')
+  private getVotesByGrup(
+    @Param('voteId') voteId: number,
+    @Param('grup') grup: string | number,
+  ) {
+    return this.voteService.getVotesByGrup(voteId, grup);
   }
 }
