@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength } from 'class-validator';
+import { IsInt, IsString, MaxLength } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('news')
@@ -22,6 +22,11 @@ export class NewsEntity {
   })
   @Column({ length: 2000, nullable: false })
   content: string;
+
+  @ApiProperty()
+  @IsInt()
+  @Column({ type: 'int', nullable: false, default: 0 })
+  likes: number;
 
   @ApiProperty()
   @IsString()
