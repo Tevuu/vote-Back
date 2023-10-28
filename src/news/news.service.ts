@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { NewsEntity } from './entities/News.entity';
 import { CreateNewsDTO, UpdateNewsDTO } from './dto/news.dto';
 import { FilesService } from 'src/files/files.service';
+import { response } from 'express';
 
 @Injectable()
 export class NewsService {
@@ -148,5 +149,31 @@ export class NewsService {
       .execute();
 
     return this.findById(id);
+  }
+
+  public async toLike(newsId: number, userId: number) {
+    const news = await this.findById(newsId);
+    if (news) {
+      const likedPersons = news.likedPersonsId ?? [];
+
+      if (likedPersons.find((item) => item == userId)) {
+        return false;
+      }
+
+      await this.news
+        .createQueryBuilder()
+        .update()
+        .set({
+          likedPersonsId: [...likedPersons, userId],
+        })
+        .where('id = :id', { id: newsId })
+        .execute();
+
+      return this.findById(newsId);
+    }
+
+    throw new NotFoundException({
+      message: 'Запрошеная новость не найдена',
+    });
   }
 }

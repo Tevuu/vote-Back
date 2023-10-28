@@ -106,4 +106,12 @@ export class NewsController {
   private async deleteImage(@Param('id') id: number) {
     return this.newsService.deleteImage(id);
   }
+
+  @Get('toLike/:newsId/:userId')
+  private async toLike(
+    @Param('newsId') newsId: number,
+    @Param('userId') userId: number,
+  ) {
+    return this.newsService.toLike(newsId, userId);
+  }
 }

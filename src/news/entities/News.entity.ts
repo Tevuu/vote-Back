@@ -37,6 +37,14 @@ export class NewsEntity {
   grup: string;
 
   @ApiProperty({
+    type: Number,
+    isArray: true,
+    nullable: true,
+  })
+  @Column({ type: 'simple-array', nullable: true, default: null })
+  likedPersonsId: number[];
+
+  @ApiProperty({
     type: String,
     isArray: true,
     nullable: true,
