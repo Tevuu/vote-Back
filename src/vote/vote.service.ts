@@ -148,7 +148,9 @@ export class VoteService {
 
     const electedIndex = vote.elected.findIndex((item) => item == email);
 
-    return vote.votes[electedIndex];
+    const votescount = vote.votes[electedIndex];
+
+    return Math.floor((Number(votescount) * 100) / Number(vote.voteCount));
   }
 
   public async getVotesByGrup(voteId: number, grup: string | number) {
