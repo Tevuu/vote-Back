@@ -24,4 +24,9 @@ export class CreateNewsDTO {
   grup: string;
 }
 
-export class UpdateNewsDTO extends PartialType(CreateNewsDTO) {}
+export class UpdateNewsDTO extends PartialType(CreateNewsDTO) {
+  likes?: number;
+  likedPersonsId?: number[];
+  dislikes?: number;
+  dislikedPersonsId?: number[];
+}

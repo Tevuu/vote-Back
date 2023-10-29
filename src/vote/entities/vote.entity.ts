@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsString, IsInt, MaxLength, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  MaxLength,
+  MinLength,
+  IsBoolean,
+} from 'class-validator';
 
 @Entity('vote')
 export class VoteEntity {
@@ -60,6 +66,11 @@ export class VoteEntity {
   @IsString()
   @Column({ type: 'varchar', nullable: false })
   endedAt: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  @Column({ type: 'bool', nullable: false, default: false })
+  extended: boolean;
 
   @Column({
     default: () => '(UNIX_TIMESTAMP())',

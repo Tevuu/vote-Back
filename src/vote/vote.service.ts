@@ -129,7 +129,7 @@ export class VoteService {
     let winnerVotes = 0;
 
     for (let i = 0; i < vote.votes.length; i++) {
-      if (vote.votes[i] > winnerVotes) {
+      if (+vote.votes[i] > winnerVotes) {
         winnerVotes = vote.votes[i];
       }
     }
@@ -139,6 +139,19 @@ export class VoteService {
     );
 
     const winnerEmail = vote.elected[winnerVotesIndex];
+
+    let arrWithoutWinner = vote.votes.slice();
+
+    for (let i = 0; i < vote.votes.length; i++) {
+      if (+arrWithoutWinner[i] == winnerVotes) {
+        arrWithoutWinner.splice(i, 1);
+        break;
+      }
+    }
+
+    if (arrWithoutWinner.find((item) => item == winnerVotes)) {
+      return false;
+    }
 
     return this.users.getNameByEmail(winnerEmail);
   }
