@@ -29,6 +29,11 @@ export class NewsEntity {
   likes: number;
 
   @ApiProperty()
+  @IsInt()
+  @Column({ type: 'int', nullable: false, default: 0 })
+  dislikes: number;
+
+  @ApiProperty()
   @IsString()
   @MaxLength(4, {
     message: 'Заголовок голосования должен быть не более 255 символов',
@@ -43,6 +48,14 @@ export class NewsEntity {
   })
   @Column({ type: 'simple-array', nullable: true, default: null })
   likedPersonsId: number[];
+
+  @ApiProperty({
+    type: Number,
+    isArray: true,
+    nullable: true,
+  })
+  @Column({ type: 'simple-array', nullable: true, default: null })
+  dislikedPersonsId: number[];
 
   @ApiProperty({
     type: String,

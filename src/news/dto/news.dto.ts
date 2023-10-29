@@ -27,4 +27,6 @@ export class CreateNewsDTO {
 export class UpdateNewsDTO extends PartialType(CreateNewsDTO) {
   likes?: number;
   likedPersonsId?: number[];
+  dislikes?: number;
+  dislikedPersonsId?: number[];
 }

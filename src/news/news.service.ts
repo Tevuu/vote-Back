@@ -155,9 +155,36 @@ export class NewsService {
     const news = await this.findById(newsId);
     if (news) {
       const likedPersons = news.likedPersonsId ?? [];
+      const dislikedPersons = news.dislikedPersonsId ?? [];
 
       if (likedPersons.find((item) => item == userId)) {
-        return false;
+        await this.news
+          .createQueryBuilder()
+          .update()
+          .set({
+            likedPersonsId: likedPersons.filter((item) => item != userId),
+            likes: likedPersons.length - 1,
+          })
+          .where('id = :id', { id: newsId })
+          .execute();
+
+        return this.findById(newsId);
+      }
+
+      if (dislikedPersons.find((item) => item == userId)) {
+        await this.news
+          .createQueryBuilder()
+          .update()
+          .set({
+            likedPersonsId: [...likedPersons, userId],
+            likes: likedPersons.length + 1,
+            dislikes: dislikedPersons.length - 1,
+            dislikedPersonsId: dislikedPersons.filter((item) => item != userId),
+          })
+          .where('id = :id', { id: newsId })
+          .execute();
+
+        return this.findById(newsId);
       }
 
       await this.news
@@ -165,6 +192,7 @@ export class NewsService {
         .update()
         .set({
           likedPersonsId: [...likedPersons, userId],
+          likes: likedPersons.length + 1,
         })
         .where('id = :id', { id: newsId })
         .execute();
@@ -175,5 +203,78 @@ export class NewsService {
     throw new NotFoundException({
       message: 'Запрошеная новость не найдена',
     });
+  }
+
+  public async toDislike(newsId: number, userId: number) {
+    const news = await this.findById(newsId);
+    if (news) {
+      const dislikedPersons = news.dislikedPersonsId ?? [];
+      const likedPersons = news.likedPersonsId ?? [];
+
+      if (dislikedPersons.find((item) => item == userId)) {
+        await this.news
+          .createQueryBuilder()
+          .update()
+          .set({
+            dislikedPersonsId: dislikedPersons.filter((item) => item != userId),
+            dislikes: dislikedPersons.length - 1,
+          })
+          .where('id = :id', { id: newsId })
+          .execute();
+
+        return this.findById(newsId);
+      }
+
+      if (likedPersons.find((item) => item == userId)) {
+        await this.news
+          .createQueryBuilder()
+          .update()
+          .set({
+            likedPersonsId: likedPersons.filter((item) => item != userId),
+            likes: likedPersons.length - 1,
+            dislikes: dislikedPersons.length + 1,
+            dislikedPersonsId: [...dislikedPersons, userId],
+          })
+          .where('id = :id', { id: newsId })
+          .execute();
+
+        return this.findById(newsId);
+      }
+
+      await this.news
+        .createQueryBuilder()
+        .update()
+        .set({
+          dislikedPersonsId: [...dislikedPersons, userId],
+          dislikes: dislikedPersons.length + 1,
+        })
+        .where('id = :id', { id: newsId })
+        .execute();
+
+      return this.findById(newsId);
+    }
+
+    throw new NotFoundException({
+      message: 'Запрошеная новость не найдена',
+    });
+  }
+
+  public async statistics(newsId: number) {
+    const news = await this.findById(newsId);
+    return +news.likes - +news.dislikes;
+  }
+
+  public async marked(newsId: number, userId: number) {
+    const news = await this.findById(newsId);
+
+    if (news.likedPersonsId.find((item) => item == userId)) {
+      return 'liked';
+    }
+
+    if (news.dislikedPersonsId.find((item) => item == userId)) {
+      return 'disliked';
+    }
+
+    return false;
   }
 }

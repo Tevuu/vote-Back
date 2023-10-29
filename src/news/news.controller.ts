@@ -114,4 +114,25 @@ export class NewsController {
   ) {
     return this.newsService.toLike(newsId, userId);
   }
+
+  @Get('toDislike/:newsId/:userId')
+  private async toDislike(
+    @Param('newsId') newsId: number,
+    @Param('userId') userId: number,
+  ) {
+    return this.newsService.toDislike(newsId, userId);
+  }
+
+  @Get('statistics/:newsId')
+  private statistics(@Param('newsId') newsId: number) {
+    return this.newsService.statistics(newsId);
+  }
+
+  @Get('marked/:newsId/:userId')
+  private marked(
+    @Param('newsId') newsId: number,
+    @Param('userId') userId: number,
+  ) {
+    return this.newsService.marked(newsId, userId);
+  }
 }
