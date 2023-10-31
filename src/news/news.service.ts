@@ -267,11 +267,17 @@ export class NewsService {
   public async marked(newsId: number, userId: number) {
     const news = await this.findById(newsId);
 
-    if (news.likedPersonsId.find((item) => item == userId)) {
+    if (
+      news.likedPersonsId &&
+      news.likedPersonsId.find((item) => item == userId)
+    ) {
       return 'liked';
     }
 
-    if (news.dislikedPersonsId.find((item) => item == userId)) {
+    if (
+      news.dislikedPersonsId &&
+      news.dislikedPersonsId.find((item) => item == userId)
+    ) {
       return 'disliked';
     }
 
