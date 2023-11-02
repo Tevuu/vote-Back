@@ -111,4 +111,9 @@ export class VoteController {
   ) {
     return this.voteService.getVotesByGrup(voteId, grup);
   }
+
+  @Delete('delForHour/:id')
+  private delForHour(@Param('id') id: number) {
+    return this.voteService.delForHour(id)
+  }
 }

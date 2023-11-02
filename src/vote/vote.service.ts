@@ -176,4 +176,8 @@ export class VoteService {
       item.grup.find((item) => item == grup),
     );
   }
+
+  public async delForHour(id: number) {
+    setTimeout(() => this.destroy(id), 86400000);
+  }
 }
